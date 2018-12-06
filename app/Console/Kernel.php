@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('cron:cron --call=first_task')->cron('* * * * *')->withoutOverlapping();//第一个计划任务
     }
 
     /**

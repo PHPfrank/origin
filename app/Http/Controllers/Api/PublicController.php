@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Support\Common;
 use Illuminate\Http\Request;
+use App\Support\Websocket;
 use DB;
 
 class PublicController extends Controller
@@ -25,6 +27,11 @@ class PublicController extends Controller
         $ext = explode('.', parse_url($url)['path']);
         $ext = array_pop($ext);
         return $ext;
+    }
+
+    public function startSocket()
+    {
+        return sqrt(9);
     }
 
 }

@@ -1,5 +1,6 @@
 <?php
 /**
+ * 通用函数类
  * Created by PhpStorm.
  * User: frank
  * Date: 2018/12/3
@@ -11,14 +12,14 @@ namespace App\Support;
 class Common
 {
     /**
-     * 上传图片接口
+     * 上传文件（图片）
      * @param string $file
      * @return string
      */
     public static function upload($file="")
     {
         $data  = array(
-            'pic' => curl_file_create(realpath($file['tmp_name']),$file['type'],$file['name'])
+            'file' => curl_file_create(realpath($file['tmp_name']),$file['type'],$file['name'])
         );
 
         $url  = config("common.pic_url");
@@ -68,10 +69,10 @@ class Common
         return $result;
     }
     /**
-     * 生存唯一uid
+     * 生存唯一用户uuid
      * @return bool|string
      */
-    public static function guid()
+    public static function getUid()
     {
         if (function_exists('com_create_guid')) {
             $uuid = com_create_guid();
@@ -89,7 +90,11 @@ class Common
         return substr($uuid, 1, -1);
     }
 
-    //生成唯一订单编号
+    /**
+     * 生成唯一订单号
+     * @param $uid下单用户ID
+     * @return string
+     */
     public static function makePaySn($uid)
     {
         return mt_rand(100, 999)
@@ -100,18 +105,23 @@ class Common
 
     /**
      * 格式化金额
-     *
-     * @param     $str     需要格式化的字符串
-     * @param int $ws      保留几位小数
-     *
-     * @return string  返回格式化的数据
+     * @param $str
+     * @param int $ws
+     * @return string
      */
     public static function getRealamount($str, $ws = 2)
     {
         return sprintf("%.{$ws}f", round($str, $ws));
     }
 
-    //经纬度计算距离
+    /**
+     * 根据经纬度获取距离
+     * @param $lng1
+     * @param $lat1
+     * @param $lng2
+     * @param $lat2
+     * @return float
+     */
     static public function GetInstance($lng1, $lat1, $lng2, $lat2){
         // 将角度转为狐度
         $radLat1 = deg2rad((float)$lat1); //deg2rad()函数将角度转换为弧度
@@ -125,7 +135,13 @@ class Common
         return $res;
     }
 
-    //数组单维度展示排序
+    /**
+     * 数组根据某字段排序
+     * @param $array
+     * @param $field
+     * @param bool $desc
+     * @return array
+     */
     static public function sortArrByOneField(&$array, $field, $desc = false)
     {
         $array    = self::object2array($array);
@@ -138,7 +154,11 @@ class Common
         return $array;
     }
 
-    //对象转数组方法
+    /**
+     * 对象转数组
+     * @param $object
+     * @return array
+     */
     static public function object2array($object)
     {
         $array = [];
@@ -151,8 +171,12 @@ class Common
         }
         return $array;
     }
-    
-    //微信curl请求
+
+    /**
+     * 微信curl请求
+     * @param $url
+     * @return mixed
+     */
     public static function httpGet($url) {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

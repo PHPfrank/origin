@@ -22,7 +22,7 @@ class api
             return response(['code' => 200, 'msg' => '成功','data'=>(object)[]]);
         }
 
-        if (config('api_auth.status') === 'on' && !in_array($uri,$url)) {
+        if (config('apiAuth.status') === 'on' && !in_array($uri,$url)) {
 
             $timestamp      = $request->header('timestamp');//时间戳
             $os             = $request->header('os');//来源
@@ -30,7 +30,7 @@ class api
             /**
              * 获取 errorJson 函数
              */
-            $errorJson = config('api_auth.errorJson');
+            $errorJson = config('apiAuth.errorJson');
 
             if (!is_callable($errorJson)) {
 
@@ -43,7 +43,7 @@ class api
                 return self::errorJson(-999);
             }
 
-            $roles = config('api_auth.roles');
+            $roles = config('apiAuth.roles');
 
             if (!isset($roles[$os])) {
 
@@ -51,14 +51,14 @@ class api
 
             }
 
-            $encrypting = config('api_auth.encrypting');
+            $encrypting = config('apiAuth.encrypting');
 
             if (!is_callable($encrypting)) {
 
                 return self::errorJson(-994,'encrypting is not function !');
             }
 
-            $rule = config('api_auth.rule');
+            $rule = config('apiAuth.rule');
 
             if (!is_callable($rule)) {
 
@@ -72,7 +72,7 @@ class api
                 return self::errorJson(-997);// 签名不一致
             }
 
-            $timeout = config('api_auth.timeout', 60);
+            $timeout = config('apiAuth.timeout', 60);
 
             if (time() - $timestamp > $timeout) {
 
@@ -122,9 +122,11 @@ class api
     {
         return $signature === $server_signature;
     }
+
     /**
+     * 验证加密
      * @param $secret_key
-     * @param $channel
+     * @param $os
      * @param $timestamp
      * @return string
      */

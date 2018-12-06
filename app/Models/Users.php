@@ -22,4 +22,10 @@ class Users extends Model implements Transformable
      */
     protected $fillable = [];
 
+    /**
+     * The attributes that are not mass assignable.
+     * @var array
+     */
+    protected $guarded = ['id'];
+
 }

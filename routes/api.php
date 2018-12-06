@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 /**----------------------------公共模块------------------------------------**/
 //测试
 Route::any('test',['uses' => 'PublicController@test']);
+//socket
+Route::any('start',['uses' => 'PublicController@startSocket']);
 
 /**----------------------------END---------------------------------------**/
 //测试

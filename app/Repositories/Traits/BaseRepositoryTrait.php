@@ -274,6 +274,7 @@ trait BaseRepositoryTrait
         }
         return false;
     }
+
     public function wherePaginate(array $where,$columns = ['*'],$limit=null,$method = "paginate"){
 
         $this->applyCriteria();
@@ -290,6 +291,7 @@ trait BaseRepositoryTrait
 
         return $this->parserResult($results);
     }
+
     public function whereRawPaginate($where,$columns = ['*'],$limit=null,$method = "paginate"){
 
         $this->applyCriteria();
