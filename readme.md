@@ -2,16 +2,13 @@
 ## repository，存取需求
 ## validator，参数验证需求
 ## services，业务逻辑
-***
-## repository注意事项
-***
 
+## repository注意事项
 *发布model : php artisan make:entity UserOrder
 *允许修改的model字段白名单 ：protected $fillable;
 *不允许修改的model字段 ：protected $guarded = [];
 
 ## repository常用方法
-
 *all($columns = array('*'))
 *first($columns = array('*'))
 *paginate($limit = null, $columns = ['*'])
