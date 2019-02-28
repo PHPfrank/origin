@@ -8,7 +8,7 @@
  */
 namespace App\Support;
 
-class Alipay
+class AliPay
 {
     /**
      * 单笔转账到支付宝账户（提现）

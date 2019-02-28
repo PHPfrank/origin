@@ -9,7 +9,7 @@ namespace App\Support;
 use App\Libraries\Union;
 use Illuminate\Support\Facades\Redis;
 
-class Weixin
+class WxCommon
 {
     //微信
     private $appId;

@@ -11,7 +11,7 @@ namespace App\Support;
 use Config;
 use Request;
 
-class Wxpay
+class WxPay
 {
     /*
     配置参数
@@ -212,6 +212,14 @@ class Wxpay
     获取当前服务器的真实IP
     */
     public function get_client_ip(){
+//REMOTE_ADDR 是你的客户端跟你的服务器“握手”时候的IP。
+//如果使用了“匿名代理”，REMOTE_ADDR将显示代理服务器的IP。
+//HTTP_CLIENT_IP 是代理服务器发送的HTTP头。
+//如果是“超级匿名代理”，则返回none值。同样，REMOTE_ADDR也会被替换为这个代理服务器的IP。
+//$_SERVER['REMOTE_ADDR']; //访问端（有可能是用户，有可能是代理的）IP
+// $_SERVER['HTTP_CLIENT_IP']; //代理端的（有可能存在，可伪造）
+//$_SERVER['HTTP_X_FORWARDED_FOR']; //用户是在哪个IP使用的代理（有可能存在，也可以伪造
+
         $IPaddress = '';
         if (isset($_SERVER)) {
             if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
