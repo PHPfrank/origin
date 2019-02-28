@@ -76,11 +76,13 @@ class Controller extends BaseController
      */
     public function wantsJson($data = ""){
         if (is_array($data)){
+            //返回json数据
             return $this->returnJson($data);
-        }elseif ($data == 1){
+        } elseif ($data == 1){
+            //返回操作成功
             return $this->stringJson();
-        }
-        else{
+        } else{
+            //返回错误信息
             return $this->errorJson($data);
         }
     }
@@ -91,7 +93,7 @@ class Controller extends BaseController
      * @param int $status
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function stringJson($msg = "成功",$type = 0,$status = 200){
+    protected function stringJson($msg = "操作成功",$type = 0,$status = 200){
 
         $data  = array(
             "msg"   => $msg,
