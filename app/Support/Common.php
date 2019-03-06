@@ -309,7 +309,7 @@ class Common
          /* Curl settings */
          $headers = array('Content-Type'=>'application/x-www-form-urlencoded');
          curl_setopt($ci, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-         curl_setopt($ci, CURLOPT_USERAGENT, 'X-YZ-Client 2.0.0 - PHP');
+         curl_setopt($ci, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36');
          curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 30);
          curl_setopt($ci, CURLOPT_TIMEOUT, 30);
          curl_setopt($ci, CURLOPT_RETURNTRANSFER, TRUE);
@@ -317,7 +317,8 @@ class Common
          curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false);
          curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 2);
          curl_setopt($ci, CURLOPT_HEADER, FALSE);
-
+         //curl_setopt($ci,CURLOPT_COOKIE,'X-User-Token=PrOY0ypaWnaq3z7TtZ56EZWsoYmyRyGy');
+         //curl_setopt($ci,CURLOPT_COOKIE,'PHPSESSID=5cj5djrts40ca8unvtq68hpack; _ga=GA1.2.1756271746.1544753964; _gid=GA1.2.1001883130.1544753964; ANGSESSID=24o7hdrerk55tp9ac6febq7780');
          switch ($method) {
              case 'POST':
                  curl_setopt($ci, CURLOPT_POST, TRUE);
@@ -421,5 +422,39 @@ class Common
         }
         return $temp;
     }
+
+    /**
+     * 梯度式算法
+     * @param $useNum,用户使用的数值
+     * @return $price,费用的计算结果
+     */
+    public static function calculate($useNum)
+    {
+        if ($useNum < 1) {
+            return 0;
+        }
+        // 价格及其范围的配置定义 | 此梯度可抽出来独立配置
+        $degrees = [10, 20, 50, 100, 300];
+        $prices  = [1, 1.2, 1.4, 1.8, 2.4, 5];
+
+        // 判断是否达到最贵的价格梯度并计算其价格
+        $beyondNum = $useNum - end($degrees);
+        $price     = ($beyondNum >= 0 ? $beyondNum : 0) * end($prices);
+
+        // 上一层价格峰值
+        $prePeak = 0;
+        foreach ($degrees as $key => $value) {
+            if ($useNum <= $value) {
+                $price += ($useNum - $prePeak) * $prices[$key];
+                break;
+            }
+            $price   += ($value - $prePeak) * $prices[$key];
+            $prePeak = $value;
+        }
+        unset($degrees, $prices, $beyondNum, $prePeak);
+
+        return $price;
+    }
+
 
 }

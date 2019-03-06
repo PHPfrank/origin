@@ -21,9 +21,11 @@ class User
     }
 
 
-    public function getUsers(array $data){
+    public function getUsers(array $data)
+    {
 
         $field = ['id','user_id','nickname','vest','vest_price'];
+
         if(!empty($data['user_id'])){
             $result['users'] = $this->users->findByField("user_id",$data['user_id'],$field);
         }else{
@@ -35,4 +37,15 @@ class User
         return $result;
 
     }
+
+    public function getList(array $data)
+    {
+        //搜索条件
+        $where = $this->users->search($data);
+        //获取结果
+        $result = $this->users->getWhereList($where);
+        //数据返回控制层
+        return $result;
+    }
+
 }

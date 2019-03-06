@@ -25,7 +25,7 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|void
      */
-    public function getUsers(Request $request)
+    public function getMyInfo(Request $request)
     {
         $user = $this->checkUser();
 //        //转数组
@@ -34,5 +34,22 @@ class UserController extends Controller
         //数据返回
         return $this->wantsJson($result);
     }
+
+    public function getUserList(Request $request)
+    {
+        //接收参数
+        $data = [];
+        $field =  ["uid","nickname","status","sex"];
+        foreach ($field as $key){
+            if ($request->has($key)){
+                $data[$key] = $request->input($key);
+            }
+        }
+        //获取用户列表
+        $list = $this->users->getList($data);
+        //数据返回
+        return $this->wantsJson($list);
+    }
+
 
 }

@@ -19,7 +19,13 @@ use Illuminate\Http\Request;
 Route::any('test',['uses' => 'PublicController@test']);
 //socket
 Route::any('start',['uses' => 'PublicController@startSocket']);
+//queue
+Route::any('queue',['uses' => 'PublicController@queue']);
+//patch
+Route::patch('patch',['uses' => 'PublicController@testPatch']);
 
 /**----------------------------END---------------------------------------**/
-//测试
-Route::get('users',['uses' => 'UserController@getUsers']);
+//我的信息
+Route::get('my_info',['uses' => 'UserController@getMyInfo']);
+//用户列表
+Route::get('user_list',['uses' => 'UserController@getUserList']);

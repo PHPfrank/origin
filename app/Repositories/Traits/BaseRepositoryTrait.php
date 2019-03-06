@@ -122,50 +122,33 @@ trait BaseRepositoryTrait
         return $this->parserResult($model);
 
     }
-    /**
-     * 获取单个列表
-     * @param $where
-     * @param array $columns
-     * @param null $orderRaw
-     * @param int $limit
-     * @param int $page
-     * @return array
-     */
-    public function getWhereList($where,$columns=['*'],$orderRaw=null,$limit=10,$page=1){
 
-        $result = $this->model
-            ->whereRaw($where)
-            ->orderByRaw($orderRaw)
-            ->select($columns)
-            ->skip(($page-1)*$limit)
-            ->take($limit)
-            ->get();
-        return isset($result) ? $result->toArray() : array();
-    }
     /**
-     * 后台单独获取
-     * @param array $where
+     * 根据whereRaw条件获取列表
+     * @param $where
      * @param null $orderRaw
-     * @param $limit
-     * @param $page
+     * @param array $columns
+     * @param int $page
+     * @param int $limit
      * @return mixed
      */
-    public function getAdminWhere(array $where,$orderRaw=null,$limit,$page){
+    public function getWhereList($where,$orderRaw=null,$columns=['*'],$page=1,$limit=10){
 
         if ($orderRaw == null){
 
             $orderRaw = "id desc";
         }
 
-        $result['list']  = $this->model
-            ->where($where)
+        $result['list'] = $this->model
+            ->whereRaw($where)
             ->orderByRaw($orderRaw)
-            ->select(['*'])
-            ->skip(($page - 1) * $limit)
-            ->take($limit)
-            ->get()
-            ->toArray();
-        $result['count'] = $this->model->where($where)->count();
+            ->select($columns)
+            ->forPage($page, $limit)
+            ->get();
+
+        $result['count'] = $this->model
+            ->whereRaw($where)
+            ->count();
 
         return $result;
     }
@@ -308,15 +291,13 @@ trait BaseRepositoryTrait
 
         return $this->parserResult($results);
     }
-    /*
-     * ----------------------------------
+
+    /**
      * 批量更新
-     * ----------------------------------
      * 批量之前需要确保in里面的key不重复，否则后面一个不更新
-     * multiple update in one query
-     *
-     * tablename( required | string )
-     * multipleData ( required | array of array )
+     * @param string $tableName
+     * @param array $multipleData
+     * @return bool|int
      */
     public function updateBatch($tableName = "",$multipleData = array()){
 
