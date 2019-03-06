@@ -96,31 +96,33 @@ trait BaseRepositoryTrait
     }
 
     /**
-     * 根据条件获取列表
-     * @param array $where
+     * 根据where数组获取列表
+     * @param $where
+     * @param null $orderRaw
      * @param array $columns
+     * @param int $page
      * @param int $limit
-     * @param int $offset
      * @return mixed
-     * @throws \Prettus\Repository\Exceptions\RepositoryException
      */
-    public function getLimitOffset(array $where,$limit=10,$offset = 0,$columns = ['*']){
+    public function getWhereList(array $where,$orderRaw=null,$columns=['*'],$page=1,$limit=10)
+    {
+        if ($orderRaw == null){
 
-        $this->applyCriteria();
+            $orderRaw = "id desc";
+        }
 
-        $this->applyScope();
-
-        $model = $this->model
+        $result['list'] = $this->model
             ->where($where)
+            ->orderByRaw($orderRaw)
             ->select($columns)
-            ->limit($limit)
-            ->offset($offset)
+            ->forPage($page, $limit)
             ->get();
 
-        $this->resetModel();
+        $result['count'] = $this->model
+            ->where($where)
+            ->count();
 
-        return $this->parserResult($model);
-
+        return $result;
     }
 
     /**
@@ -132,7 +134,7 @@ trait BaseRepositoryTrait
      * @param int $limit
      * @return mixed
      */
-    public function getWhereList($where,$orderRaw=null,$columns=['*'],$page=1,$limit=10){
+    public function getWhereListByLaw($where,$orderRaw=null,$columns=['*'],$page=1,$limit=10){
 
         if ($orderRaw == null){
 
@@ -171,6 +173,13 @@ trait BaseRepositoryTrait
         return $result;
     }
 
+    /**
+     * whereIn查询
+     * @param $field
+     * @param array $value
+     * @param array $columns
+     * @return mixed
+     */
     public function getByWhereIn($field, array $value, $columns = ['*'])
     {
 

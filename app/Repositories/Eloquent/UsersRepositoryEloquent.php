@@ -36,11 +36,11 @@ class UsersRepositoryEloquent extends BaseRepository implements UsersRepository
     }
 
     /**
-     * 拼接搜索条件
+     * 拼接搜索条件（raw）
      * @param array $data
      * @return string
      */
-    public function search(array $data)
+    public function searchRaw(array $data)
     {
         $where = "1 = 1";
 
@@ -54,6 +54,32 @@ class UsersRepositoryEloquent extends BaseRepository implements UsersRepository
                 $service_time = explode('-', $data['created_at']);
                 $where .= " and service_time >= '" . $service_time[0] . "'";
                 $where .= " and service_time <= '" . $service_time[1] . "'";
+            }
+        }
+        return $where;
+    }
+
+    /**
+     * 搜索条件（数组）
+     * @param array $data
+     * @return array
+     */
+    public function searchArray(array $data)
+    {
+        $where = [];
+
+        if (!empty($data) && is_array($data))
+        {
+            if (isset($data["nickname"])) $where[] = ['nickname', 'like', '%'.$data["nickname"].'%'];
+
+            if (isset($data["uid"])) $where[] = ['uid', '=', $data["uid"]];
+
+            if (isset($data["status"])) $where[] = ['status', '=', $data["status"]];
+
+            if (!empty($data["created_at"])) {
+                $service_time = explode('-', $data['created_at']);
+                $where[] = ['created_at', '>=', $service_time[0]];
+                $where[] = ['created_at', '<=', $service_time[1]];
             }
         }
         return $where;

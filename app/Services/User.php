@@ -41,7 +41,7 @@ class User
     public function getList(array $data)
     {
         //搜索条件
-        $where = $this->users->search($data);
+        $where = $this->users->searchArray($data);
         //获取结果
         $result = $this->users->getWhereList($where);
         //数据返回控制层
